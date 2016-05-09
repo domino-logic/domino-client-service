@@ -16,5 +16,8 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/domino-logic/domino-client-service/issues"
+  },
+  "dependencies": {
+    "node-uuid": "^1.4.7"
   }
 }

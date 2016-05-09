@@ -1,4 +1,5 @@
 import objectAssign from 'object-assign'
+import uuid from 'node-uuid'
 
 if(!window.io){
   throw new Error('Socket IO is missing. ' +
@@ -132,11 +133,14 @@ export default class Domino {
   }
 
   action(action, payload){
+    const correlation = uuid.v4()
+
     this.socket.emit(
       'action',
       {
         type: action,
-        payload: payload
+        payload: payload,
+        corr: correlation
       }
     );
   }
