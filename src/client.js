@@ -61,6 +61,7 @@ export default class Domino {
 
     this.socket = io()
     this.socket.on('change', this.changeReceived.bind(this))
+    this.socket.on('response', this.responseReceived.bind(this))
   }
 
   setContext (newContext) {
@@ -158,6 +159,10 @@ export default class Domino {
       this.socket.emit('unsubscribe', topic)
       console.info(`Unsubcribing to channel ${topic}`)
     }
+  }
+
+  responseReceived (message) {
+    console.log('Response received', message)
   }
 
   changeReceived (message) {
