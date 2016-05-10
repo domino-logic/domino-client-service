@@ -179,7 +179,7 @@ export default class Domino {
       }
     }
 
-    console.log('Change received', message)
+    console.log('Response received', message)
   }
 
   changeReceived (message) {
