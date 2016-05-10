@@ -178,6 +178,8 @@ export default class Domino {
         promise.reject(message.content)
       }
     }
+
+    console.log('Change received', message)
   }
 
   changeReceived (message) {
