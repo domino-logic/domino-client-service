@@ -1,5 +1,6 @@
 import objectAssign from 'object-assign'
 import uuid from 'node-uuid'
+import when from 'when'
 
 if(!window.io){
   throw new Error('Socket IO is missing. ' +
@@ -58,6 +59,7 @@ export default class Domino {
     this.context = {}
     this.registry = {}
     this.topics = []
+    this.promesses = {}
 
     this.socket = io()
     this.socket.on('change', this.changeReceived.bind(this))
@@ -134,14 +136,15 @@ export default class Domino {
   }
 
   action(action, payload){
-    const correlation = uuid.v4()
+    const correlationId = uuid.v4()
+    this.promesses[correlationId] = when.defer()
 
     this.socket.emit(
       'action',
       {
         type: action,
         payload: payload,
-        corr: correlation
+        corr: correlationId
       }
     );
   }
@@ -162,7 +165,16 @@ export default class Domino {
   }
 
   responseReceived (message) {
-    console.log('Response received', message)
+    const promise = this.promesses[message.correlationId]
+
+    if(promise){
+      if(message.status == 'ok') {
+        promise.resolve(message.content)
+      }
+      else {
+        promise.reject(message.content)
+      }
+    }
   }
 
   changeReceived (message) {
