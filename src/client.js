@@ -137,9 +137,9 @@ export default class Domino {
 
   action(action, payload){
     const correlationId = uuid.v4()
-    const promise = when.defer()
+    const deferred = when.defer()
 
-    this.promesses[correlationId] = promise
+    this.promesses[correlationId] = deferred
     this.socket.emit(
       'action',
       {
@@ -149,7 +149,7 @@ export default class Domino {
       }
     );
 
-    return promise
+    return deferred.promise
   }
 
   subscribe(topic){
